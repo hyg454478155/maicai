@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="eat">
     <!--搜索栏 -->
     <search></search>
     <!--今日菜单  -->
@@ -22,14 +22,8 @@ export default {
 }
 </script>
 <style scoped>
-  .div1{
+  #eat{
     width:100%;
-    position:fixed;
-    z-index: 1;
-    overflow:hidden;
+    height:auto;
   }
-  .van-search__content{
-    background-color:#eee;
-  }
-
 </style>

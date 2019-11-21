@@ -7,8 +7,6 @@ import Page from '../views/Page'
 import Eat from '../views/Eat'
 import Cart from '../views/Cart'
 import Mine from '../views/Mine'
-import pro1 from '../views/pro/pro1'
-import pro2 from '../views/pro/pro2'
 
 
 Vue.use(VueRouter)
@@ -24,7 +22,14 @@ const routes = [
       {path:"/",component:Page},
       {path:"/Product",component:Product},
       {path:"/Eat",component:Eat},
-      {path:"/Cart",component:Cart},
+      {path:"/Cart",component:Cart,beforeEnter: (to, from, next) => {
+        if(localStorage.getItem("key")){
+          next();
+          return
+        }
+        next("/login");
+       
+      }},
       {path:"/Mine",component:Mine},
     ]
   },

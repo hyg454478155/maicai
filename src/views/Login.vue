@@ -70,11 +70,14 @@ export default {
       this.axios.get(url,{params:obj})
       .then(res=>{
         if(res.data.code<0){
+          //登录失败
           this.$dialog.alert({
             message:"登录失败"
           })
         }else{
+          //登录成功
            this.$router.push("/");
+           localStorage.setItem("key","登录成功");
         }
       })
     },
@@ -109,7 +112,7 @@ export default {
   },
   //关闭按钮
     close(){
-
+      this.$router.push("/")
     },
     // 动画切换
     change(i){

@@ -23,6 +23,7 @@ export default {
     position:fixed;
     z-index: 1;
     overflow:hidden;
+    background-color:#fff;
   }
   .van-search__content{
     background-color:#eee;

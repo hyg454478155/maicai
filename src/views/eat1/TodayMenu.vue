@@ -1,18 +1,27 @@
 <template>
   <div id="menu">
+    <div class="fixed">
     <div class="head">
       今日菜单
     </div>
     <div class="nav">
-      <van-tag v-for="(item,index) in typelist" :key="index" plain round @click=change :data-id="index" :color="tagcolor[index]?'#1afa29':''">{{item}}</van-tag>
+      <van-tag v-for="(item,index) in typelist" :key="index" plain round @click="change" :color="tagcolor[index]?'#1afa29':''" :data-id="index">{{item}}</van-tag>
+    </div>
     </div>
     <div class="content">
-      <van-tabs v-model="active" lazy-render>
-      <van-tab title="标签 1">
-        <menu1></menu1>
-      </van-tab>
-      <van-tab title="标签 1">内容 2</van-tab>
-</van-tabs>
+      <van-tabs v-model="active">
+        <van-tab title="标签 1">
+          <menu1></menu1>
+        </van-tab>
+        <van-tab title="标签2">
+          <menu1></menu1>
+        </van-tab>
+        <van-tab title="标签3">
+        </van-tab>
+        <van-tab>
+
+        </van-tab>
+      </van-tabs>
     </div>
   </div>
 </template>
@@ -27,16 +36,20 @@ export default {
   },
   data(){
     return{
-      tagcolor:[false,false,false,false,false,false,false,false,false,false,false,false],
+      tagcolor:[true,false,false,false,false,false,false,false,false,false,false,false],
       active:0
     }
   },
   methods:{
     change(event){
+      for(var i=0;i<this.tagcolor.length;i++){
+        this.tagcolor[i]=false;
+      }
       var idx=event.target.dataset.id;
-      console.log(idx);
       this.tagcolor[idx]=true;
+      this.$set(this.tagcolor,idx,true);
     }
+
   },
   components:{
     Menu1
@@ -46,7 +59,6 @@ export default {
 <style scoped>
   #menu{
     width:100%;
-    height:auto;
     padding-top:4rem;
   }
   .head{
@@ -68,5 +80,12 @@ export default {
   }
   #menu /deep/ .van-tabs--line .van-tabs__wrap {
     display:none;
+  }
+  .fixed{
+    width:100%;
+    background:#fff;
+    position:fixed;
+    z-index:2;
+    top:3.4rem;
   }
 </style>

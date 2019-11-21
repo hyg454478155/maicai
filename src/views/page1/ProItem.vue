@@ -6,8 +6,7 @@
       <p class="itemSubTitle">{{item.details}}</p>
       <span class="price">{{"￥"+Number(item.price).toFixed(2)}}</span>
       <span class="originPrice">{{"￥"+Number(item.price).toFixed(2)}}</span>
-      <div class="buyCar"
-           >
+      <div @click="addCart(item)"  class="buyCar">
         <svg viewBox="0 0 52 52"
              class="icon icon-60">
           <defs>
@@ -29,7 +28,7 @@
              fill-rule="evenodd">
             <g transform="translate(-678.000000, -2742.000000)">
               <g transform="translate(678.000000, 2742.000000)">
-                <rect fill="url(#radialGradient-1)"
+                <rect :data-id="index" fill="url(#radialGradient-1)"
                       x="0"
                       y="0"
                       width="51.8699976"
@@ -56,6 +55,16 @@ export default {
       default:"",
       type:Array
     }
+  },
+  methods:{
+    addCart(item){
+      // var idx=event.target.dataset.id;
+      // console.log(idx);
+      
+    }
+  },
+  created(){
+    console.log(this.pro_list);
   }
 }
 </script>
