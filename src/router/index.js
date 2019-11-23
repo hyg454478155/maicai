@@ -7,6 +7,8 @@ import Page from '../views/Page'
 import Eat from '../views/Eat'
 import Cart from '../views/Cart'
 import Mine from '../views/Mine'
+import Details from '../views/Details'
+import MyOrder from '../views/mine1/MyOrder'
 
 
 Vue.use(VueRouter)
@@ -30,10 +32,18 @@ const routes = [
         next("/login");
        
       }},
-      {path:"/Mine",component:Mine},
+      //个人中心
+      {path:"/Mine",component:Mine,children:[ 
+        //个人中心子路由
+        {path:"MyOrder",component:MyOrder}
+      ]},
     ]
   },
-
+  {
+    path: '/Details/:id',
+    component:Details,
+    props:true
+  }
 ]
 
 const router = new VueRouter({

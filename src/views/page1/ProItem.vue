@@ -1,7 +1,7 @@
 <template>
   <div id="productItem">
     <div class="item" v-for="(item,index) in pro_list" :key=index>
-      <img :src="`http://127.0.0.1:4000/pro/`+item.img_url" alt="">
+      <img :data-id="item.id" @click="goDetails" :src="`http://127.0.0.1:4000/pro/`+item.img_url" alt="">
       <p class="itemTitle">{{item.pname}}</p>
       <p class="itemSubTitle">{{item.details}}</p>
       <span class="price">{{"￥"+Number(item.price).toFixed(2)}}</span>
@@ -49,6 +49,7 @@
   </div>
 </template>
 <script>
+import bus from '../../bus'
 export default {
   props:{
     pro_list:{
@@ -60,11 +61,16 @@ export default {
     addCart(item){
       // var idx=event.target.dataset.id;
       // console.log(idx);
-      
+      this.$store.commit("ADD_GOODS",item);
+      //bus.$emit("addToCart",item);
+      this.$toast("添加购物车成功")
+    },
+    goDetails(event){
+      var id=event.target.dataset.id;
+      this.$router.push(`details/${id}`);
     }
   },
   created(){
-    console.log(this.pro_list);
   }
 }
 </script>

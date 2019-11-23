@@ -11,6 +11,7 @@
     <navx :nav_list="nav_list"></navx>
     <vip></vip>
     <flash :pro_list="pro_list"></flash>
+    <!-- 商品列表模块 -->
     <tabber :pro_list="pro_list"></tabber>
   </div>   
 </template>
