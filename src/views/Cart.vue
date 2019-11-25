@@ -4,35 +4,37 @@
     <!-- 头部区域 -->
     <header class="titleWeapper">
       <h4><strong>购物车</strong></h4>
-      <div class="claerCart" :style="selectedGoods==0?'color:grey' :'color:#45c763'" @click="clearCart" v-show="isShow">删除</div>
+      <div class="claerCart" :style="selectedGoods==0?'color:grey' :'color:#45c763'" @click="clearCart" v-show="!isShow">删除</div>
     </header>
     <!-- 购物车没有商品 -->
     <div class="cartWrapper" >
       <!-- 购物车为空 -->
-      <div class="emptyCart" v-show="!isShow">
+      <div class="emptyCart" v-show="isShow">
         <img src="@/assets/img/cart/empty.png" alt="">
         <div class="title">购物车空空滴</div>
         <router-link to="/" class="goHome">去逛逛</router-link>
       </div>
       <!-- 购物车有数据 -->
-      <div class="contentWrapper" v-show="isShow">
-        <div class="contentWrapperList" v-for="(item,index) in pro_list" :key="index">
+      <div class="contentWrapper" v-show="!isShow">
+        <div class="contentWrapperList" v-for="(value,item,index) in shopCart" :key="index">
           <section>
             <div class="shopCartListCon">
               <div class="left">
-              <a href="javaScript:;" class="cartCheckBox" :checked="item.checked"></a>
+              <a href="javaScript:;" class="cartCheckBox" :checked="value.checked"
+              @click.stop="SINGLE_GOODS(value.id)"
+              ></a>
               </div>
               <div class="center">
-                <img :src="`http://127.0.0.1:4000/pro/`+item.smallimg" alt="">
+                <img :src="`http://127.0.0.1:4000/pro/`+value.smallimg" alt="">
               </div>
               <div class="right">
-                <a>{{item.name}}</a>
+                <a>{{value.name}}</a>
                 <div class="bottomContent">
-                <p class="shopPrice">{{"￥"+Number(item.price).toFixed(2)}}</p>
+                <p class="shopPrice">{{"￥"+Number(value.price).toFixed(2)}}</p>
                 <div class="shopDeal">
-                  <span @click="reduceGoods(index,item.num)">-</span>
-                  <input type="number" disabled v-model="item.num">
-                  <span @click="addGoods(index,item.num)">+</span>
+                  <span @click="REDUCE_GOODS(value.id)">-</span>
+                  <input type="number" disabled v-model="value.num">
+                  <span @click="INT_GOODS(value.id)">+</span>
                 </div>
               </div>
             </div>
@@ -40,68 +42,87 @@
           </section>
         </div>
       </div>
+      <!-- 提交订单 -->
+      <van-submit-bar
+        :price="totalPrice"
+        button-text="提交订单"
+        @submit="onSubmit"
+        v-show="!isShow"
+        >
+        <van-checkbox  v-model="checkAll" checked-color="#45c763">全选</van-checkbox>
+      </van-submit-bar>  
     </div>
   </div>
 </template>
 <script>
-import Bus from '../bus'
+import { mapState } from "vuex";
+import { mapMutations } from "vuex";
+import { mapGetters } from "vuex";
+import{ Dialog } from "vant";
 export default {
   mounted(){
-    // Bus.$on('addToCart',(item)=>{
-    //   this.addToCart(item);
-    // })
-    // var item=this.$store.getters.GET_GOODS;
-    // var i=0;
-    // for(var key in item){
-    //   this.pro_list[i]=item[key];
-    //   i++;
-    // }
-    if((this.pro_list==0)==false){
-      this.isShow=true;
-    }
-    console.log(this.pro_list);
+    console.log(this.SLECTED_GOODS);
   },
   data(){
     return{
-      selectedGoods:0,
-      isShow:false,
+      selectedGoods:1,
+      checkAll:true,
     }
   },
   computed:{
-      //获取商品信息
-      pro_list(){
-        var item=this.$store.getters.GET_GOODS;
-        var i=0;
-        var pro_list=[];
-        for(var key in item){
-         pro_list[i]=item[key];
-        i++;
-        }
-        return pro_list;
+      isShow(){
+        //判断组件是否显示
+      if(Object.keys(this.shopCart)==0){
+        return true
+      }else{
+        return false
+    }
       },
-      //获取商品的数量
-      por_num(){
-        var num=this.pro_list.num;
-        return num;
-      }
+      totalPrice(){
+        var price=0;
+        for(let item in this.shopCart){
+          var num=this.shopCart[item].num;
+          price+=this.shopCart[item].price*num;
+        }
+        return price*100;
+      },
+      list(){
+        
+      },
+      ...mapState([
+        'shopCart' //购物车数据
+      ]),
+      ...mapGetters([
+        'SLECTED_GOODS' //被选中数量
+      ])
 
   },
   methods:{
-    //使购物车内的商品+1
-    addGoods(index,num){
-      var id=this.pro_list[index].id;
-      this.$store.commit("INT_GOODS",id)
-    },
-    //使购物车内的商品-1
-    reduceGoods(index,num){
-      var id=this.pro_list[index].id;
-      this.$store.commit("REDUCE_GOODS",id)
-    },
-    //清除购物车内的全部商品
+    ...mapMutations([
+     "INT_GOODS", //购物车内商品数量+1
+      "REDUCE_GOODS", //购物车内商品数量-1
+      "CLEAR_GOODS",  //清除被选中的商品
+      "SINGLE_GOODS"  //设置商品是否被选中
+    ]),
     clearCart(){
-      
-    }
+      //删除选中的商品
+      if(this.selectedGoods>0){
+        Dialog.confirm({
+          title:'温馨提示',
+          message:'确认删除选中商品?'
+        }).then(()=>{
+          this.CLEAR_GOODS();
+        }).catch(()=>{
+
+        });
+      }
+    },
+    onSubmit(){
+      //提交订单
+    alert("订单已提交");
   }
+  },
+
 
 }
 </script>

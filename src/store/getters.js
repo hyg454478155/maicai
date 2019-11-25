@@ -1,12 +1,19 @@
 import{
   GET_GOODS,
-  GET_NUM
+  SLECTED_GOODS
 }from './mutation-type'
 export default{
   [GET_GOODS](state){
     return state.shopCart
   },
-  [GET_NUM](state,id){
-    return state.shopCart[id];
+  [SLECTED_GOODS](state){
+    var length=0;
+    var cart=state.shopCart;
+    for(let item in cart){
+      if(cart[item].checked==true){
+        length++;
+      }
+    }
+    return length;
   }
 }
