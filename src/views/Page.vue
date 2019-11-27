@@ -23,6 +23,7 @@ import Navx from "./page1/Navx"
 import Vip from "./page1/Vip"
 import Flash from "./page1/Flash"
 import Tabber from "./page1/Tabber"
+import { product } from "@/request/api"
 export default {
   data(){
     return{
@@ -39,7 +40,8 @@ export default {
         {name:"米面粮油",img:"9.jpg"},
         {name:"调味品",img:"10.jpg"},
         ],
-      pro_list:[]
+      pro_list:[],
+      list:[],
     }
   },
   //子组件
@@ -54,15 +56,16 @@ export default {
   },
   methods:{
     getPro(){
-      var url="product";
-      this.axios.get(url)
-      .then(res=>{
-        this.pro_list=res.data.data;
-      })
+     product({
+
+     }).then(res=>{
+        this.pro_list=res.data;
+     })
     }
   },
   created(){
-    this.getPro()
+    this.getPro();
+
   }
 }
 </script>

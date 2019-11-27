@@ -6,14 +6,16 @@ export default{
   [GET_GOODS](state){
     return state.shopCart
   },
+  //获取被选中商品的长度
   [SLECTED_GOODS](state){
     var length=0;
     var cart=state.shopCart;
-    for(let item in cart){
-      if(cart[item].checked==true){
-        length++;
-      }
-    }
+    Object.values(cart).forEach(
+      (goods,index)=>{
+        if(goods.checked){
+          length++;
+        }
+    })
     return length;
   }
 }

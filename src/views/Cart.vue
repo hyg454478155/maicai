@@ -4,7 +4,7 @@
     <!-- 头部区域 -->
     <header class="titleWeapper">
       <h4><strong>购物车</strong></h4>
-      <div class="claerCart" :style="selectedGoods==0?'color:grey' :'color:#45c763'" @click="clearCart" v-show="!isShow">删除</div>
+      <div class="claerCart" :style="selectCount==0?'color:grey' :'color:#45c763'" @click="clearCart" v-show="!isShow">删除</div>
     </header>
     <!-- 购物车没有商品 -->
     <div class="cartWrapper" >
@@ -45,11 +45,12 @@
       <!-- 提交订单 -->
       <van-submit-bar
         :price="totalPrice"
-        button-text="提交订单"
+        :button-text="submitBarText"
+        :disabled="!(selectCount)>0"
         @submit="onSubmit"
         v-show="!isShow"
         >
-        <van-checkbox  v-model="checkAll" checked-color="#45c763">全选</van-checkbox>
+        <van-checkbox  v-model="isCheckAll" checked-color="#45c763">全选</van-checkbox>
       </van-submit-bar>  
     </div>
   </div>
@@ -61,12 +62,10 @@ import { mapGetters } from "vuex";
 import{ Dialog } from "vant";
 export default {
   mounted(){
-    console.log(this.SLECTED_GOODS);
   },
   data(){
     return{
-      selectedGoods:1,
-      checkAll:true,
+
     }
   },
   computed:{
@@ -78,16 +77,47 @@ export default {
         return false
     }
       },
+      //被选中商品的总价格
       totalPrice(){
         var price=0;
         for(let item in this.shopCart){
+          if(this.shopCart[item].checked){
           var num=this.shopCart[item].num;
           price+=this.shopCart[item].price*num;
+          }
         }
         return price*100;
       },
-      list(){
-        
+      //被选中商品的数量长度
+      selectCount(){
+        var count=0;
+        for(let item in this.shopCart){
+          if(this.shopCart[item].checked){
+            count++;
+          }
+        }
+        return count;
+      },
+      //提交订单按钮的文字
+      submitBarText(){
+        var count=this.selectCount;
+        return '结算'+(count ?`(${count})`:'')
+      },
+      isCheckAll:{
+        get(){
+          let tag=this.selectCount>0;
+          let shopCart=this.shopCart;
+          Object.values(shopCart).forEach(goods => {
+            if (!goods.checked) {
+              tag = false;
+            }
+            });
+            return tag;
+          },
+          set(value){
+            let isCheckedAll=!value;
+            this.ALL_SELECT_GOODS(isCheckedAll)
+          }
       },
       ...mapState([
         'shopCart' //购物车数据
@@ -102,11 +132,15 @@ export default {
      "INT_GOODS", //购物车内商品数量+1
       "REDUCE_GOODS", //购物车内商品数量-1
       "CLEAR_GOODS",  //清除被选中的商品
-      "SINGLE_GOODS"  //设置商品是否被选中
+      "SINGLE_GOODS",  //设置商品是否被选中
+      "ALL_SELECT_GOODS"  //设置商品全选
     ]),
+    change(){
+      console.log(1);
+    },
     clearCart(){
       //删除选中的商品
-      if(this.selectedGoods>0){
+      if(this.selectCount>0){
         Dialog.confirm({
           title:'温馨提示',
           message:'确认删除选中商品?'

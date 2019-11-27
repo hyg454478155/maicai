@@ -4,6 +4,7 @@ import{
   REDUCE_GOODS,
   SINGLE_GOODS,
   CLEAR_GOODS,
+  ALL_SELECT_GOODS
 } from './mutation-type'
 import Vue from 'vue'
 
@@ -77,5 +78,21 @@ export default {
     }
     state.shopCart=null;
     state.shopCart=newCart;
+  },
+  //6.全选商品
+  [ALL_SELECT_GOODS](state,isCheckedAll){
+    //6.1取出state中的商品数据
+    let shopCart = state.shopCart;
+    Object.values(shopCart).forEach((goods, index) => {
+        if (goods.checked) { // 存在该属性
+            goods.checked = !isCheckedAll;
+        } else {
+            Vue.set(goods, 'checked', !isCheckedAll);
+        }
+    });
+    //6.2同步state数据
+      state.shopCart = {
+          ...shopCart
+      };
   }
 }

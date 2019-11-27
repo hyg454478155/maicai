@@ -5,7 +5,7 @@
       今日菜单
     </div>
     <div class="nav">
-      <van-tag v-for="(item,index) in typelist" :key="index" plain round @click="change" :color="tagcolor[index]?'#1afa29':''" :data-id="index">{{item}}</van-tag>
+      <van-tag v-for="(item,index) in typelist" :key="index" plain round @click="change(index)" :color="tagcolor[index]?'#1afa29':''" >{{item}}</van-tag>
     </div>
     </div>
     <div class="content">
@@ -19,7 +19,22 @@
         <van-tab title="标签3">
         </van-tab>
         <van-tab>
-
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
+        </van-tab>
+        <van-tab>
         </van-tab>
       </van-tabs>
     </div>
@@ -41,13 +56,13 @@ export default {
     }
   },
   methods:{
-    change(event){
+    change(index){
       for(var i=0;i<this.tagcolor.length;i++){
         this.tagcolor[i]=false;
       }
-      var idx=event.target.dataset.id;
-      this.tagcolor[idx]=true;
-      this.$set(this.tagcolor,idx,true);
+      this.tagcolor[index]=true;
+      this.$set(this.tagcolor,index,true);
+      this.active=index;
     }
 
   },
@@ -88,4 +103,5 @@ export default {
     z-index:2;
     top:3.4rem;
   }
+
 </style>

@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { login } from '@/request/api'; //导入登录接口
 export default {
   data(){
     return{
@@ -67,9 +68,9 @@ export default {
         }
       var url="login";
       var obj={uname:this.uname,upwd:this.upwd};
-      this.axios.get(url,{params:obj})
+      login(obj)
       .then(res=>{
-        if(res.data.code<0){
+        if(res.code<0){
           //登录失败
           this.$dialog.alert({
             message:"登录失败"

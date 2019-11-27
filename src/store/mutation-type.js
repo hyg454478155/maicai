@@ -12,3 +12,5 @@ export const SINGLE_GOODS='SINGLE_GOODS';
 export const CLEAR_GOODS='CLEAR_GOODS';
 //7.获取被选中商品的数量
 export const SLECTED_GOODS='SLECTED_GOODS'
+//8.全选商品
+export const ALL_SELECT_GOODS='ALL_SELECT_GOODS';
